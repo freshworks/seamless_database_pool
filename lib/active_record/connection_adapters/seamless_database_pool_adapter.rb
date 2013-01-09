@@ -113,6 +113,8 @@ module ActiveRecord
           master_methods -= public_instance_methods(false) + protected_instance_methods(false) + private_instance_methods(false)
           master_methods = master_methods.collect{|m| m.to_sym}
           master_methods -= read_only_methods
+          #Adding these methods for after commit as they are overrirding teh proxy 
+          master_methods = master_methods + [:rollback_db_transaction, :transaction, :commit_db_transaction] 
 
           klass = Class.new(self)
           master_methods.each do |method_name|
