@@ -114,7 +114,7 @@ module ActiveRecord
           master_methods = master_methods.collect{|m| m.to_sym}
           master_methods -= read_only_methods
           #Adding these methods for after commit as they are overrirding teh proxy 
-          master_methods = master_methods + [:rollback_db_transaction, :transaction, :commit_db_transaction] 
+          #master_methods = master_methods + [:rollback_db_transaction, :transaction, :commit_db_transaction] 
 
           klass = Class.new(self)
           master_methods.each do |method_name|
@@ -177,6 +177,24 @@ module ActiveRecord
       
       def adapter_name #:nodoc:
         'Seamless_Database_Pool'
+      end
+      
+      def begin_db_transaction #:nodoc:
+        execute "BEGIN"
+      rescue Exception
+        # Transactions aren't supported
+      end
+
+      def commit_db_transaction #:nodoc:
+        execute "COMMIT"
+      rescue Exception
+        # Transactions aren't supported
+      end
+
+      def rollback_db_transaction #:nodoc:
+        execute "ROLLBACK"
+      rescue Exception
+        # Transactions aren't supported
       end
       
       # Returns an array of the master connection and the read pool connections
