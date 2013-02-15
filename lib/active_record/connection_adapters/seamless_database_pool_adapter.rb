@@ -171,7 +171,7 @@ module ActiveRecord
       end
 
       # To be compatible with Thinking Sphinx; one must return the connection class name, since seamless_database_pool only supports one type of connection, it's safe to return the master connection
-      def name
+      def self.name
         return "ActiveRecord::ConnectionAdapters::MysqlAdapter"
       end
       
